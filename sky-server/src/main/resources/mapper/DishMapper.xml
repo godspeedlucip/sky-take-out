@@ -72,5 +72,18 @@
         </where>
         order by create_time desc
     </select>
+
+    <update id="statusDish">
+        update dish set
+        status=#{status}
+        <where>
+            id=#{id}
+        </where>
+    </update>
+
+
+    <select id="getBySetmealId" resultType="Dish">
+        select * from dish as d left join setmeal_dish as s on d.id=s.dish_id where s.id=#{id}
+    </select>
 </mapper>
 

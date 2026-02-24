@@ -6,6 +6,7 @@ import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.entity.Dish;
 import com.sky.entity.Employee;
+import com.sky.entity.SetmealDish;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -85,4 +86,19 @@ public interface DishMapper {
      * @param dish
      */
     List<Dish> list(Dish dish);
+
+    /**
+     * 修改id的菜品的状态为status
+     * @param status
+     * @param id
+     */
+    void statusDish(int status, long id);
+
+    /**
+     * 查询套餐id关联的所有setmeal_id
+     * @param id
+     * @return
+     */
+    List<Dish> getBySetmealId(Long id);
+
 }

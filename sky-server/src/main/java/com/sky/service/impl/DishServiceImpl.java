@@ -6,13 +6,11 @@ import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
-import com.sky.entity.Category;
-import com.sky.entity.Dish;
-import com.sky.entity.DishFlavor;
-import com.sky.entity.Employee;
+import com.sky.entity.*;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlaverMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.OrderMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
@@ -43,6 +41,8 @@ public class DishServiceImpl implements DishService {
 
     @Autowired
     private SetmealMapper setmealMapper;
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Override
     //因为要同时更改两个数据库，因此要用这个
@@ -180,5 +180,39 @@ public class DishServiceImpl implements DishService {
         }
 
         return dishVOList;
+    }
+
+    /**
+     * 起售/停售菜品
+     * @param status
+     * @param id
+     */
+    public long statusDish(int status, long id){
+        Dish dish = dishMapper.getById(id);
+        dishMapper.statusDish(status, id);
+        return dish.getCategoryId();
+    }
+
+    /**
+     * 根据构建的dish筛选条件来查询属于某个category的dish
+     * @param dish
+     * @return
+     */
+    public List<Dish> list(Dish dish) {
+        // 调用 Mapper 查询
+        return dishMapper.list(dish);
+    }
+
+    /**
+     * 客户催单
+     * @param id
+     */
+    public void remind(String id){
+        //查询订单是否存在
+        Orders byNumber = orderMapper.getByNumber(id);
+
+        if(byNumber!=null){
+
+        }
     }
 }

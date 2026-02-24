@@ -1,9 +1,16 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.sky.annotation.AutoFill;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
+import com.sky.entity.SetmealDish;
+import com.sky.enumeration.OperationType;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -39,4 +46,65 @@ public interface SetmealMapper {
             "from setmeal_dish sd left join dish d on sd.dish_id = d.id " +
             "where sd.setmeal_id = #{setmealId}")
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
+
+
+    // 直接给出的代码
+    /**
+     * 新增套餐
+     * @param setmeal
+     */
+    @AutoFill(value = OperationType.INSERT)
+    void insert(Setmeal setmeal);
+
+    /**
+     * 分页查询套餐及对应的分类名称
+     * @param setmealPageQueryDTO
+     * @return
+     */
+    Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
+    @Select("select * from setmeal where id = #{id}")
+    Setmeal getById(Long id);
+
+    /**
+     * 根据id删除套餐
+     * @param id
+     */
+    void deleteById(Long id);
+
+    /**
+     * 批量删除套餐
+     * @param ids
+     */
+    void deleteBatch(List<Long> ids);
+
+    /**
+     * 修改套餐基本信息
+     * @param setmeal
+     */
+    @AutoFill(value = OperationType.UPDATE)
+//    @Update("update setmeal set status=")
+    void update(Setmeal setmeal);
+
+    /**
+     * 批量插入setmeal_dish
+     * @param setmealDishes
+     */
+    @AutoFill(value = OperationType.INSERT)
+    void insertBatch(List<SetmealDish> setmealDishes);
+
+    void deleteBySetmealIds(List<Long> ids);
+
+    void deleteBySetmealId(Long id);
+
+    /** 根据setmeal id查询得到许多dish
+     * @param id
+     * @return
+     */
+    List<SetmealDish> getBySetmealId(Long id);
 }
